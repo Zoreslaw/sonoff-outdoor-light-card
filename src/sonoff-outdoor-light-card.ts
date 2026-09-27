@@ -54,13 +54,6 @@ export class SonoffOutdoorLightCard extends LitElement {
     if (!entity) return this.renderError(`Сутність не знайдено: ${this.config.entity}`);
     const isOn = entity.state === 'on';
     const available = isOn || entity.state === 'off';
-    const status = isOn
-      ? 'УВІМКНЕНО'
-      : entity.state === 'off'
-        ? 'ВИМКНЕНО'
-        : entity.state === 'unavailable'
-          ? 'НЕДОСТУПНО'
-          : 'НЕВІДОМО';
     const name = this.config.name || entity.attributes.friendly_name || this.config.entity;
     return html`
       <ha-card class=${`${isOn ? 'is-on' : ''} ${available ? '' : 'unavailable'}`}>
@@ -75,7 +68,6 @@ export class SonoffOutdoorLightCard extends LitElement {
               <h2>${name}</h2>
               <div class="entity-id">${this.config.entity}</div>
             </div>
-            <div class="state-badge"><span class="state-dot"></span><span class="status">${status}</span></div>
           </div>
           <button
             type="button"
@@ -360,31 +352,6 @@ export class SonoffOutdoorLightCard extends LitElement {
       line-height: 1.5;
       color: var(--secondary-text-color, #9eabb5);
       overflow-wrap: anywhere;
-    }
-    .state-badge {
-      display: flex;
-      gap: 6px;
-      align-items: center;
-      padding: 7px 9px;
-      border: 1px solid var(--divider-color, #3a4851);
-      border-radius: 7px;
-      flex-shrink: 0;
-      margin-top: 2px;
-    }
-    .status {
-      font-size: 9px;
-      letter-spacing: 1px;
-      font-weight: 700;
-    }
-    .state-dot {
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: var(--secondary-text-color, #9eabb5);
-    }
-    .is-on .state-dot {
-      background: #efce8b;
-      box-shadow: 0 0 9px #efce8b88;
     }
     .power-switch {
       display: block;

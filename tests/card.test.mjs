@@ -50,11 +50,11 @@ test('configuration validation', () => {
 test('renders name, state, entity and reacts to hass/config changes', async () => {
   const el = await card();
   assert.equal(el.shadowRoot.querySelector('h2').textContent, 'Garden');
-  assert.equal(el.shadowRoot.querySelector('.status').textContent, 'ВИМКНЕНО');
+  assert.equal(el.shadowRoot.querySelector('.state-badge'), null);
   assert.equal(el.shadowRoot.querySelector('.entity-id').textContent, config.entity);
   el.hass = hass('on');
   await el.updateComplete;
-  assert.equal(el.shadowRoot.querySelector('.status').textContent, 'УВІМКНЕНО');
+  assert.equal(el.shadowRoot.querySelector('.state-badge'), null);
   el.setConfig({ ...config, name: 'Outdoor lights' });
   await el.updateComplete;
   assert.equal(el.shadowRoot.querySelector('h2').textContent, 'Outdoor lights');
@@ -75,10 +75,7 @@ test('toggle calls the correct switch service and waits for hass state', async (
     el.shadowRoot.querySelector('button').click();
     await el.updateComplete;
     assert.deepEqual(calls, [['switch', service, { entity_id: config.entity }]]);
-    assert.equal(
-      el.shadowRoot.querySelector('.status').textContent,
-      { off: 'ВИМКНЕНО', on: 'УВІМКНЕНО', unknown: 'НЕВІДОМО', unavailable: 'НЕДОСТУПНО' }[state],
-    );
+    assert.equal(el.shadowRoot.querySelector('.state-badge'), null);
     el.remove();
   }
 });
@@ -106,10 +103,7 @@ test('unavailable and unknown states cannot call services', async () => {
     el.shadowRoot.querySelector('button').click();
     await el.updateComplete;
     assert.deepEqual(calls, []);
-    assert.equal(
-      el.shadowRoot.querySelector('.status').textContent,
-      { off: 'ВИМКНЕНО', on: 'УВІМКНЕНО', unknown: 'НЕВІДОМО', unavailable: 'НЕДОСТУПНО' }[state],
-    );
+    assert.equal(el.shadowRoot.querySelector('.state-badge'), null);
     el.remove();
   }
 });
