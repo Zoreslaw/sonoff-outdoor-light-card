@@ -1,18 +1,18 @@
 // For format details, see https://aka.ms/devcontainer.json
 // Uses custom-cards/custom-card-devcontainer image for Home Assistant + Dev environment
 {
-  "name": "Home Assistant Custom Card Dev",
+  "name": "Sonoff Outdoor Light Card",
 
   // Use published devcontainer image
   "image": "ghcr.io/custom-cards/custom-card-devcontainer:latest",
   "remoteUser": "vscode",
 
   // Set working directory
-  "workspaceFolder": "/workspaces/test",
+  "workspaceFolder": "/workspaces/sonoff-outdoor-light-card",
   
   // Mount project to workspace, dist to Lovelace plugins, and config directory for Home Assistant
   "mounts": [
-    "source=${localWorkspaceFolder},target=/workspaces/test,type=bind",
+    "source=${localWorkspaceFolder},target=/workspaces/sonoff-outdoor-light-card,type=bind",
     "source=${localWorkspaceFolder}/dist,target=/config/www/workspace,type=bind",
     "source=${localWorkspaceFolder}/.devcontainer/config,target=/config,type=bind"
   ],
@@ -32,12 +32,12 @@
     "DEVCONTAINER": "1",
     "HASS_USERNAME": "dev",
     "HASS_PASSWORD": "dev",
-    "LOVELACE_REMOTE_FILES": "http://localhost:5000/boilerplate-card.js"
+    "LOVELACE_REMOTE_FILES": "http://localhost:5000/sonoff-outdoor-light-card.js"
   },
 
   // Setup Home Assistant and install dependencies
-  "postCreateCommand": "container setup && corepack enable && yarn install",
-  "postStartCommand": "container launch & yarn start & wait",
+  "postCreateCommand": "container setup && npm install",
+  "postStartCommand": "container launch & npm start & wait",
 
   // VS Code extensions for development
   "customizations": {

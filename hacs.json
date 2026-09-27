@@ -1,5 +1,5 @@
 {
-    "name": "Boilerplate Card",
-    "render_readme": true,
-    "filename": "boilerplate-card.js"
+  "name": "Sonoff Outdoor Light Card",
+  "render_readme": true,
+  "filename": "sonoff-outdoor-light-card.js"
 }

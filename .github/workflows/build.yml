@@ -1,32 +1,20 @@
-name: 'Build'
-
+name: Build
 on:
   push:
-    branches:
-      - master
   pull_request:
-    branches:
-      - master
-
 jobs:
   build:
-    name: Test build
     runs-on: ubuntu-latest
-    env:
-      COREPACK_ENABLE_DOWNLOAD_PROMPT: 0
     steps:
       - uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: '24'
-
-      - name: Install dependencies
-        run: |
-          corepack enable
-          corepack prepare yarn@4.12.0 --activate
-          yarn install --immutable
-
-      - name: Build
-        run: yarn build
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npm test
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sonoff-outdoor-light-card
+          path: dist/sonoff-outdoor-light-card.js
