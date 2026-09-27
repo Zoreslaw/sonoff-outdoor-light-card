@@ -2,6 +2,7 @@
 
 This project is sonoff-outdoor-light-card, a small Home Assistant dashboard card.
 
+- Write all documentation, code comments, and project text in English only.
 - Use TypeScript, Lit and Rollup, with strict typing.
 - Main file: src/sonoff-outdoor-light-card.ts. Configuration types: src/types.ts.
 - The only required option is entity; name is optional.
