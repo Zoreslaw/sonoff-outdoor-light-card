@@ -1,7 +1,11 @@
 name: Build
 on:
   push:
+    branches:
+      - '**'
   pull_request:
+permissions:
+  contents: read
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -18,3 +22,4 @@ jobs:
         with:
           name: sonoff-outdoor-light-card
           path: dist/sonoff-outdoor-light-card.js
+          if-no-files-found: error

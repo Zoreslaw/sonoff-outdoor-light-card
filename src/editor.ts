@@ -15,9 +15,9 @@ export class SonoffOutdoorLightCardEditor extends LitElement {
     if (!this.config) return html``;
     return html`
       <label
-        >Switch entity (required)
+        >Сутність перемикача (обов’язково)
         <select .value=${this.config.entity} @change=${this.entityChanged}>
-          <option value="">Select a switch</option>
+          <option value="">Виберіть перемикач</option>
           ${
             this.config.entity && !this.hass?.states[this.config.entity]
               ? html`<option value=${this.config.entity}>${this.config.entity}</option>`
@@ -30,7 +30,7 @@ export class SonoffOutdoorLightCardEditor extends LitElement {
         </select>
       </label>
       <label
-        >Name (optional)
+        >Назва (необов’язково)
         <input .value=${this.config.name ?? ''} @input=${this.nameChanged} />
       </label>
     `;

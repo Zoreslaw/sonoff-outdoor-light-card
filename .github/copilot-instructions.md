@@ -2,7 +2,8 @@
 
 This project is sonoff-outdoor-light-card, a small Home Assistant dashboard card.
 
-- Write all documentation, code comments, and project text in English only.
+- Write all user-facing UI text in Ukrainian, including card labels, statuses, error messages, and visual editor text.
+- Write documentation and code comments in English. Keep code identifiers, configuration keys, entity IDs, and Home Assistant API values unchanged.
 - Use TypeScript, Lit and Rollup, with strict typing.
 - Main file: src/sonoff-outdoor-light-card.ts. Configuration types: src/types.ts.
 - The only required option is entity; name is optional.

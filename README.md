@@ -19,7 +19,7 @@ Output: `dist/sonoff-outdoor-light-card.js`. All runtime dependencies are includ
 2. Open the top-right menu and select **Custom repositories**.
 3. Enter `https://github.com/Zoreslaw/sonoff-outdoor-light-card` and select **Dashboard** as the type (called **Lovelace** in older versions).
 4. Select **Add**, find **Sonoff Outdoor Light Card**, and download it.
-5. Refresh the browser and add **Sonoff Outdoor Light Card** to your dashboard.
+5. Refresh the browser and add **Освітлення подвір’я Sonoff** to your dashboard.
 6. In the visual editor, select your existing switch entity and optionally enter a name.
 
 If you previously registered `/local/sonoff-outdoor-light-card.js` manually, remove that resource before using the HACS copy to avoid loading the card twice. You can leave the old file on disk.
@@ -35,6 +35,12 @@ name: Outdoor lights
 ```
 
 Replace `switch.example` with your actual entity_id from **Developer tools > States**. The device must already be integrated into Home Assistant; this card controls its switch entity.
+
+### Updating through HACS
+
+Open the card repository in HACS and install the available update, then reload the dashboard in each browser or Home Assistant Companion App. Existing card configuration and the resource URL stay the same. If the old UI remains visible, clear the frontend cache and reload.
+
+HACS installs the `sonoff-outdoor-light-card.js` asset from the GitHub release; there is no need to copy files manually or restart Home Assistant for a card update.
 
 ## Manual installation in Home Assistant
 
@@ -54,14 +60,14 @@ If you have just created the `www` directory, restart Home Assistant. After repl
 
 - `entity`: required entity_id of an existing switch entity.
 - `name`: optional display name. Defaults to the entity's friendly_name, then its entity_id.
-- The card displays the name, ON/OFF state, entity_id, and a large toggle button.
+- The card displays the name, ON/OFF state, entity_id, and a binary power slider.
 - ON calls `switch.turn_off`; OFF calls `switch.turn_on`.
 - State updates through the reactive `hass` property.
-- For unavailable/unknown states, the button is disabled and the current state is displayed.
+- For unavailable/unknown states, the power slider is disabled and the current state is displayed.
 - Missing entities and unsupported domains display an error inside ha-card.
 - Service call failures display an error inside the card.
 
-The card appears in the picker as **Sonoff Outdoor Light Card**. The visual editor provides a switch selector and an optional name field. The initial configuration selects the first existing switch entity. If no switch exists, create one in Home Assistant first.
+The card UI is in Ukrainian and appears in the picker as **Освітлення подвір’я Sonoff**. User-provided names and entity friendly names are displayed as configured. The visual editor provides a switch selector and an optional name field. The initial configuration selects the first existing switch entity. If no switch exists, create one in Home Assistant first.
 
 The card communicates only through Home Assistant. It does not use the Sonoff API, eWeLink, MQTT, or direct device protocols.
 
@@ -81,8 +87,30 @@ Tests exercise the built module using a DOM environment and a simulated hass ins
 
 Repository: [Zoreslaw/sonoff-outdoor-light-card](https://github.com/Zoreslaw/sonoff-outdoor-light-card).
 
-To publish a new version, update the version in package.json and package-lock.json, commit the changes, then push a matching tag such as `v1.0.0`. GitHub Actions validate the version, build and test the card, and publish a release with `sonoff-outdoor-light-card.js` attached. HACS uses `hacs.json` and this release asset.
+Version `1.1.0` is prepared in `package.json` and `package-lock.json`. After committing the changes, publish it with:
+
+```sh
+git push origin main
+git tag v1.1.0
+git push origin v1.1.0
+```
+
+The branch push runs the build checks. The tag push validates that the tag and both package files have matching versions, builds and tests the card, and publishes a GitHub release with `sonoff-outdoor-light-card.js` attached. HACS uses `hacs.json` and this release asset. No npm publication or additional GitHub secret is required; the release workflow uses the repository's `GITHUB_TOKEN` with `contents: write` permission.
+
+For subsequent releases, run `npm version minor --no-git-tag-version` (or `patch` for a fix), commit both package files with your changes, and push a tag matching the new version. You can also publish a matching tag through GitHub's Releases page; the workflow will build and attach the bundle to that release. A tag must point to the commit containing its matching package version. Re-running the workflow uploads the asset to an existing release instead of trying to create it again.
 
 ## License
 
 MIT; see LICENSE. Existing copyright notices are preserved.
+
+## Night yard control
+
+The original SVG yard scene fades in warm lamp and ground lighting only when Home Assistant reports `on`. No external images, fonts, or network assets are required.
+
+- Tap or click the power switch to toggle. Drag the thumb to either endpoint to select OFF or ON; this does not control brightness.
+- Focus the switch and press Space or Enter to toggle. Arrow Right/Up or End selects ON; Arrow Left/Down or Home selects OFF.
+- A separate sending indicator appears while the service request is in flight. The scene and accessible switch state continue to reflect `hass.states`; successful service completion alone does not illuminate the lamp.
+- Unavailable and unknown states disable the control. Service failures are announced with an inline error and allow retrying.
+- Motion is disabled when the operating system requests reduced motion. The card uses Home Assistant theme colors for its content and a fixed nighttime palette for the illustration and physical control.
+
+For a standalone preview, build the card, serve the repository root (for example, `python -m http.server 8765`), and open `http://localhost:8765/examples/preview.html`. This fixture uses a simulated Home Assistant connection and includes OFF, ON, pending, and unavailable states.
