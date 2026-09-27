@@ -13,7 +13,30 @@ npm run build
 
 Output: `dist/sonoff-outdoor-light-card.js`. All runtime dependencies are included in the bundle.
 
-## Install in Home Assistant
+## Install through HACS
+
+1. Open **HACS** in Home Assistant.
+2. Open the top-right menu and select **Custom repositories**.
+3. Enter `https://github.com/Zoreslaw/sonoff-outdoor-light-card` and select **Dashboard** as the type (called **Lovelace** in older versions).
+4. Select **Add**, find **Sonoff Outdoor Light Card**, and download it.
+5. Refresh the browser and add **Sonoff Outdoor Light Card** to your dashboard.
+6. In the visual editor, select your existing switch entity and optionally enter a name.
+
+If you previously registered `/local/sonoff-outdoor-light-card.js` manually, remove that resource before using the HACS copy to avoid loading the card twice. You can leave the old file on disk.
+
+For dashboards managed through the UI, HACS normally registers the resource automatically. If it is missing, add `/hacsfiles/sonoff-outdoor-light-card/sonoff-outdoor-light-card.js` as a **JavaScript Module** under **Settings > Dashboards > Resources**. YAML-managed dashboards require the resource to be configured in YAML.
+
+### YAML card configuration
+
+```yaml
+type: custom:sonoff-outdoor-light-card
+entity: switch.example
+name: Outdoor lights
+```
+
+Replace `switch.example` with your actual entity_id from **Developer tools > States**. The device must already be integrated into Home Assistant; this card controls its switch entity.
+
+## Manual installation in Home Assistant
 
 1. Copy `dist/sonoff-outdoor-light-card.js` to `/config/www/sonoff-outdoor-light-card.js`.
 2. Add `/local/sonoff-outdoor-light-card.js` to Dashboard Resources as a **JavaScript Module**.
@@ -56,9 +79,9 @@ Tests exercise the built module using a DOM environment and a simulated hass ins
 
 ## Repository and releases
 
-The project name is `sonoff-outdoor-light-card`. Configure the Git remote using the actual URL of your GitHub repository.
+Repository: [Zoreslaw/sonoff-outdoor-light-card](https://github.com/Zoreslaw/sonoff-outdoor-light-card).
 
-GitHub Actions build the module and attach it to published releases. HACS uses `hacs.json` and the release asset.
+To publish a new version, update the version in package.json and package-lock.json, commit the changes, then push a matching tag such as `v1.0.0`. GitHub Actions validate the version, build and test the card, and publish a release with `sonoff-outdoor-light-card.js` attached. HACS uses `hacs.json` and this release asset.
 
 ## License
 

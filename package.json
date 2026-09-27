@@ -3,6 +3,14 @@
   "type": "module",
   "version": "1.0.0",
   "description": "Home Assistant outdoor light switch card",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Zoreslaw/sonoff-outdoor-light-card.git"
+  },
+  "homepage": "https://github.com/Zoreslaw/sonoff-outdoor-light-card#readme",
+  "bugs": {
+    "url": "https://github.com/Zoreslaw/sonoff-outdoor-light-card/issues"
+  },
   "module": "dist/sonoff-outdoor-light-card.js",
   "files": [
     "dist/sonoff-outdoor-light-card.js"

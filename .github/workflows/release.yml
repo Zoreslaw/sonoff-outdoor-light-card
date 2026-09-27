@@ -1,5 +1,8 @@
 name: Release
 on:
+  push:
+    tags:
+      - 'v*'
   release:
     types: [published]
 permissions:
@@ -14,9 +17,22 @@ jobs:
           node-version: '22'
           cache: npm
       - run: npm ci
+      - name: Validate release version
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name || github.ref_name }}
+        run: |
+          node --input-type=module -e 'import fs from "node:fs"; const pkg = JSON.parse(fs.readFileSync("package.json", "utf8")); if (process.env.RELEASE_TAG !== `v${pkg.version}`) throw new Error("Release tag must match package.json version");'
       - run: npm run build
       - run: npm test
+      - name: Publish release with card bundle
+        if: github.event_name == 'push'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          gh release create "$RELEASE_TAG" dist/sonoff-outdoor-light-card.js --verify-tag --title "Sonoff Outdoor Light Card $RELEASE_TAG" --notes "Install through HACS as a custom Dashboard repository, or download sonoff-outdoor-light-card.js for manual installation. See README for configuration."
       - name: Upload card bundle
+        if: github.event_name == 'release'
         env:
           GH_TOKEN: ${{ github.token }}
           RELEASE_TAG: ${{ github.event.release.tag_name }}
