@@ -1,23 +1,23 @@
 ﻿<!doctype html>
 <html lang="uk">
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" /><title>
-    Нічне подвір’я · перегляд картки
+    Освітлення · перегляд картки
   </title>
   <style>
     :root {
       font-family: Arial, sans-serif;
-      color-scheme: dark;
-      --primary-text-color: #eef1ef;
-      --secondary-text-color: #a4b0b8;
-      --card-background-color: #1b2730;
-      --divider-color: #36434b;
-      --primary-color: #e7c98e;
+      color-scheme: light;
+      --primary-text-color: #262a31;
+      --secondary-text-color: #70757e;
+      --card-background-color: #ffffff;
+      --divider-color: #e3e5e8;
+      --primary-color: #e8d59a;
       --error-color: #ffb0a7;
     }
     body {
       margin: 0;
-      background: #101820;
-      color: #eef1ef;
+      background: #f3f4f6;
+      color: #262a31;
       padding: 40px;
     }
     header {
@@ -29,13 +29,13 @@
       margin: 10px 0;
     }
     header p {
-      color: #a4b0b8;
+      color: #70757e;
       font-size: 13px;
     }
     .eyebrow {
       font-size: 10px;
       letter-spacing: 3px;
-      color: #d5bc8d;
+      color: #8a6829;
     }
     .grid {
       display: grid;
@@ -46,7 +46,7 @@
     .label {
       font-size: 10px;
       letter-spacing: 2px;
-      color: #a4b0b8;
+      color: #70757e;
       margin: 0 0 12px;
     }
     @media (max-width: 1100px) {
@@ -67,9 +67,9 @@
     }
   </style>
   <header>
-    <span class="eyebrow">SONOFF / ПОДВІР’Я</span>
-    <h1>Зустрічайте ніч із затишком.</h1>
-    <p>Живий перегляд карток · SVG-сцена · Керування освітленням</p>
+    <span class="eyebrow">SONOFF / ОСВІТЛЕННЯ</span>
+    <h1>Світло під контролем.</h1>
+    <p>Керування освітленням · Чотири стани картки</p>
   </header>
   <main class="grid"></main>
   <script type="module">
@@ -82,11 +82,11 @@
       card.setConfig({
         type: 'custom:sonoff-outdoor-light-card',
         entity: 'switch.garden_lights',
-        name: 'Освітлення саду',
+        name: 'Освітлення',
       });
       const update = (next) => {
         card.hass = {
-          states: { 'switch.garden_lights': { state: next, attributes: { friendly_name: 'Освітлення саду' } } },
+          states: { 'switch.garden_lights': { state: next, attributes: { friendly_name: 'Освітлення' } } },
           callService: async (domain, service) => {
             if (state === 'pending') return new Promise(() => {});
             await new Promise((r) => setTimeout(r, 1000));

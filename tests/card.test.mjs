@@ -19,6 +19,8 @@ for (const key of [
 ]) {
   globalThis[key] = key === 'window' ? browser : browser[key];
 }
+globalThis.requestAnimationFrame = browser.requestAnimationFrame.bind(browser);
+globalThis.cancelAnimationFrame = browser.cancelAnimationFrame.bind(browser);
 await import('../dist/sonoff-outdoor-light-card.js');
 const Card = customElements.get('sonoff-outdoor-light-card');
 const config = { type: 'custom:sonoff-outdoor-light-card', entity: 'switch.test_lights' };
@@ -51,7 +53,8 @@ test('renders name, state, entity and reacts to hass/config changes', async () =
   const el = await card();
   assert.equal(el.shadowRoot.querySelector('h2').textContent, 'Garden');
   assert.equal(el.shadowRoot.querySelector('.state-badge'), null);
-  assert.equal(el.shadowRoot.querySelector('.entity-id').textContent, config.entity);
+  assert.equal(el.shadowRoot.querySelector('.entity-id'), null);
+  assert.ok(el.shadowRoot.querySelector('button svg'));
   el.hass = hass('on');
   await el.updateComplete;
   assert.equal(el.shadowRoot.querySelector('.state-badge'), null);
@@ -189,27 +192,46 @@ test('binary keyboard targets do not send redundant commands', async () => {
   el.remove();
 });
 
-test('drag commits one binary command; cancellation commits nothing', async () => {
+test('lamp release toggles once; cancellation and outside release do not toggle', async () => {
   const el = await card();
   const button = el.shadowRoot.querySelector('button');
   button.setPointerCapture = () => {};
-  button.getBoundingClientRect = () => ({ left: 0, width: 300 });
-  const pointer = (type, x) =>
-    button.dispatchEvent(new browser.PointerEvent(type, { clientX: x, pointerId: 1, isPrimary: true, button: 0 }));
+  button.getBoundingClientRect = () => ({ left: 0, right: 160, top: 0, bottom: 240 });
+  const pointer = (type, x = 80, y = 80) =>
+    button.dispatchEvent(
+      new browser.PointerEvent(type, { clientX: x, clientY: y, pointerId: 1, isPrimary: true, button: 0 }),
+    );
+  const click = () => button.dispatchEvent(new browser.MouseEvent('click', { detail: 1 }));
   calls.length = 0;
-  pointer('pointerdown', 70);
-  pointer('pointermove', 230);
-  assert.equal(el.shadowRoot.querySelector('ha-card').classList.contains('is-on'), false);
-  pointer('pointerup', 230);
-  button.click();
+  pointer('pointerdown');
+  pointer('pointermove', 80, 100);
+  assert.equal(calls.length, 0);
+  pointer('pointerup', 80, 100);
+  pointer('lostpointercapture');
+  click();
   await el.updateComplete;
   assert.deepEqual(calls, [['switch', 'turn_on', { entity_id: config.entity }]]);
+  await new Promise((resolve) => setTimeout(resolve, 0));
   calls.length = 0;
-  pointer('pointerdown', 70);
-  pointer('pointermove', 230);
-  pointer('pointercancel', 230);
+  pointer('pointerdown');
+  pointer('pointercancel');
+  click();
   assert.equal(calls.length, 0);
+  pointer('pointerdown');
+  pointer('pointerup', 200);
+  click();
+  assert.equal(calls.length, 0);
+  pointer('pointerdown');
+  pointer('lostpointercapture');
+  click();
+  assert.equal(calls.length, 0);
+  pointer('pointerdown');
+  pointer('pointercancel');
+  button.click();
+  await el.updateComplete;
+  assert.equal(calls.length, 1);
   el.remove();
+  assert.equal(el.style.getPropertyValue('--press'), '0px');
 });
 
 test('pending scene stays truthful and a stale failure cannot affect a new entity', async () => {
@@ -225,7 +247,7 @@ test('pending scene stays truthful and a stale failure cannot affect a new entit
   await el.updateComplete;
   el.shadowRoot.querySelector('button').click();
   await el.updateComplete;
-  assert.match(el.shadowRoot.querySelector('[role="status"]').textContent, /Надсилання команди/);
+  assert.match(el.shadowRoot.querySelector('[role="status"]').textContent, /Вмикаємо/);
   assert.equal(el.shadowRoot.querySelector('button').getAttribute('aria-busy'), 'true');
   assert.equal(el.shadowRoot.querySelector('ha-card').classList.contains('is-on'), false);
   el.setConfig({ ...config, entity: 'switch.other' });

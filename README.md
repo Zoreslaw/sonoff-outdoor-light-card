@@ -60,10 +60,11 @@ If you have just created the `www` directory, restart Home Assistant. After repl
 
 - `entity`: required entity_id of an existing switch entity.
 - `name`: optional display name. Defaults to the entity's friendly_name, then its entity_id.
-- The card displays the name, ON/OFF state, entity_id, and a binary power slider.
+- The card displays a name and an interactive vector lamp. Press the lamp to toggle it; its head compresses and returns with a damped spring animation. Dragging adjusts the compression; releasing outside or cancelling the gesture sends no command.
+- Enter/Space activate the focused lamp; arrow keys and Home/End select an explicit state. Reduced-motion preferences disable the animation.
 - ON calls `switch.turn_off`; OFF calls `switch.turn_on`.
 - State updates through the reactive `hass` property.
-- For unavailable/unknown states, the power slider is disabled and the current state is displayed.
+- For unavailable/unknown states, the lamp is disabled and a connection status is displayed. Routine state announcements are available to screen readers without permanent visual labels.
 - Missing entities and unsupported domains display an error inside ha-card.
 - Service call failures display an error inside the card.
 
@@ -87,12 +88,12 @@ Tests exercise the built module using a DOM environment and a simulated hass ins
 
 Repository: [Zoreslaw/sonoff-outdoor-light-card](https://github.com/Zoreslaw/sonoff-outdoor-light-card).
 
-Version `1.1.1` is prepared in `package.json` and `package-lock.json`. After committing the changes, publish it with:
+Version `2.0.0` is prepared in `package.json` and `package-lock.json`. After committing the changes, publish it with:
 
 ```sh
 git push origin main
-git tag v1.1.1
-git push origin v1.1.1
+git tag v2.0.0
+git push origin v2.0.0
 ```
 
 The branch push runs the build checks. The tag push validates that the tag and both package files have matching versions, builds and tests the card, and publishes a GitHub release with `sonoff-outdoor-light-card.js` attached. HACS uses `hacs.json` and this release asset. No npm publication or additional GitHub secret is required; the release workflow uses the repository's `GITHUB_TOKEN` with `contents: write` permission.
