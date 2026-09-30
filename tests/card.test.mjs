@@ -51,9 +51,9 @@ test('configuration validation', () => {
 
 test('Sections defaults match the pool cards without YAML sizing overrides', async () => {
   const el = new Card();
-  const expected = { columns: 6, rows: 4, min_columns: 3, min_rows: 4 };
+  const expected = { columns: 'full', rows: 6, min_rows: 6 };
   assert.deepEqual(el.getGridOptions(), expected);
-  assert.equal(el.getCardSize(), 4);
+  assert.equal(el.getCardSize(), 8);
   el.setConfig(config);
   document.body.append(el);
   for (const value of ['off', 'on', 'unavailable']) {

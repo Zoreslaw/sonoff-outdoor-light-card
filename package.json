@@ -1,7 +1,7 @@
 {
   "name": "sonoff-outdoor-light-card",
   "type": "module",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "Home Assistant outdoor light switch card",
   "repository": {
     "type": "git",

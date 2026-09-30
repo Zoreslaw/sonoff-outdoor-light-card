@@ -43,11 +43,11 @@ export class SonoffOutdoorLightCard extends LitElement {
   }
 
   public getCardSize(): number {
-    return 4;
+    return 8;
   }
 
   public getGridOptions() {
-    return { columns: 6, rows: 4, min_columns: 3, min_rows: 4 };
+    return { columns: 'full' as const, rows: 6, min_rows: 6 };
   }
 
   protected render() {
@@ -254,11 +254,14 @@ export class SonoffOutdoorLightCard extends LitElement {
     :host {
       display: block;
       min-width: 0;
+      height: 100%;
     }
     ha-card {
       display: block;
       box-sizing: border-box;
-      height: 344px;
+      height: 100%;
+      min-height: 376px;
+      width: 100%;
       overflow: hidden;
       border-radius: var(--ha-card-border-radius, 24px);
       background: var(--ha-card-background, var(--card-background-color, #ffffff));

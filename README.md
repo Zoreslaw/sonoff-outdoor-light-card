@@ -58,7 +58,7 @@ If you have just created the `www` directory, restart Home Assistant. After repl
 
 ## Configuration and behavior
 
-In a Sections dashboard, the card defaults to 6 columns and 4 rows (minimum 3 columns and 4 rows), matching both `sonoff-pool-card` variants. Its 344px border-box container and flexible drawing area use the same sizing rules. No `grid_options` override is needed. Existing manually saved overrides still take precedence; remove them to use the defaults. The configuration API is unchanged.
+In a Sections dashboard, the card defaults to full section width and 6 rows (minimum 6 rows), matching both `sonoff-pool-card` variants. Its container fills the assigned height, with a 376px minimum (6 x 56px rows + 5 x 8px gaps). The footer cannot shrink, keeping the interaction hint visible above the next card. No `grid_options` override is needed. Existing manually saved overrides still take precedence; remove them to use the defaults. The configuration API is unchanged.
 
 For a three-section comparison with the pool cards and matching schedule cards below, see [the Sections example](examples/sections.yaml). Register both projects' JavaScript resources and replace the example switch entities before using it.
 
@@ -92,12 +92,12 @@ Tests exercise the built module using a DOM environment and a simulated hass ins
 
 Repository: [Zoreslaw/sonoff-outdoor-light-card](https://github.com/Zoreslaw/sonoff-outdoor-light-card).
 
-Version `2.0.2` is prepared in `package.json` and `package-lock.json`. After committing the changes, publish it with:
+Version `2.0.3` is prepared in `package.json` and `package-lock.json`. After committing the changes, publish it with:
 
 ```sh
 git push origin main
-git tag v2.0.2
-git push origin v2.0.2
+git tag v2.0.3
+git push origin v2.0.3
 ```
 
 The branch push runs the build checks. The tag push validates that the tag and both package files have matching versions, builds and tests the card, and publishes a GitHub release with `sonoff-outdoor-light-card.js` attached. HACS uses `hacs.json` and this release asset. No npm publication or additional GitHub secret is required; the release workflow uses the repository's `GITHUB_TOKEN` with `contents: write` permission.
