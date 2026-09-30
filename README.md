@@ -88,12 +88,12 @@ Tests exercise the built module using a DOM environment and a simulated hass ins
 
 Repository: [Zoreslaw/sonoff-outdoor-light-card](https://github.com/Zoreslaw/sonoff-outdoor-light-card).
 
-Version `2.0.0` is prepared in `package.json` and `package-lock.json`. After committing the changes, publish it with:
+Version `2.0.1` is prepared in `package.json` and `package-lock.json`. After committing the changes, publish it with:
 
 ```sh
 git push origin main
-git tag v2.0.0
-git push origin v2.0.0
+git tag v2.0.1
+git push origin v2.0.1
 ```
 
 The branch push runs the build checks. The tag push validates that the tag and both package files have matching versions, builds and tests the card, and publishes a GitHub release with `sonoff-outdoor-light-card.js` attached. HACS uses `hacs.json` and this release asset. No npm publication or additional GitHub secret is required; the release workflow uses the repository's `GITHUB_TOKEN` with `contents: write` permission.
