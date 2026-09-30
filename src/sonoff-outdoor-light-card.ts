@@ -46,6 +46,10 @@ export class SonoffOutdoorLightCard extends LitElement {
     return 4;
   }
 
+  public getGridOptions() {
+    return { columns: 6, rows: 4, min_columns: 3, min_rows: 4 };
+  }
+
   protected render() {
     if (!this.config) return html``;
     if (!this.hass) return this.renderError('Очікування Home Assistant...');
@@ -219,7 +223,9 @@ export class SonoffOutdoorLightCard extends LitElement {
   }
 
   private renderError(message: string) {
-    return html`<ha-card><p class="content error" role="alert">${message}</p></ha-card>`;
+    return html`<ha-card
+      ><div class="content"><p class="error" role="alert">${message}</p></div></ha-card
+    >`;
   }
 
   private async toggle(target?: boolean): Promise<void> {
@@ -251,6 +257,8 @@ export class SonoffOutdoorLightCard extends LitElement {
     }
     ha-card {
       display: block;
+      box-sizing: border-box;
+      height: 344px;
       overflow: hidden;
       border-radius: var(--ha-card-border-radius, 24px);
       background: var(--ha-card-background, var(--card-background-color, #ffffff));
@@ -259,7 +267,13 @@ export class SonoffOutdoorLightCard extends LitElement {
       box-shadow: var(--ha-card-box-shadow, none);
     }
     .content {
-      padding: 24px 24px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-sizing: border-box;
+      height: 100%;
+      min-height: 0;
+      padding: 24px 16px 20px;
       text-align: center;
     }
     h2 {
@@ -269,13 +283,17 @@ export class SonoffOutdoorLightCard extends LitElement {
       line-height: 1.4;
       letter-spacing: -0.3px;
       overflow-wrap: anywhere;
+      max-width: 100%;
+      flex-shrink: 0;
     }
     .lamp-control {
       display: block;
       width: 160px;
       max-width: 100%;
       height: 240px;
-      margin: 8px auto 0;
+      min-height: 0;
+      flex-shrink: 1;
+      margin: auto 0;
       padding: 0;
       border: 0;
       border-radius: 32px;
@@ -378,14 +396,15 @@ export class SonoffOutdoorLightCard extends LitElement {
       opacity: 0.35;
     }
     .control-footer {
+      flex-shrink: 0;
+      max-width: 100%;
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 8px;
       min-height: 20px;
       color: var(--secondary-text-color, #70757e);
-      font-size: 12px;
-      line-height: 1.5;
+      font: 400 13px/20px var(--ha-font-family, system-ui, sans-serif);
     }
     .sr-only {
       position: absolute;
@@ -407,6 +426,11 @@ export class SonoffOutdoorLightCard extends LitElement {
       font-size: 13px;
       line-height: 1.5;
       overflow-wrap: anywhere;
+      flex-shrink: 0;
+      max-width: 100%;
+      max-height: 72px;
+      overflow: auto;
+      margin: 8px 0 0;
     }
     @media (prefers-reduced-motion: reduce) {
       .lamp-head {

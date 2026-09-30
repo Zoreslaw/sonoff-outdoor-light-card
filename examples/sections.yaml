@@ -1,0 +1,29 @@
+# Register both the outdoor and pool card resources before loading this dashboard.
+# Replace these example entities with the existing switch entities in your instance.
+views:
+  - title: Освітлення та басейн
+    path: sizing-comparison
+    type: sections
+    max_columns: 3
+    sections:
+      - type: grid
+        cards:
+          - type: custom:sonoff-outdoor-light-card
+            entity: switch.outdoor_lights
+          - type: markdown
+            title: Автоматичний розклад
+            content: Перевірка вирівнювання
+      - type: grid
+        cards:
+          - type: custom:sonoff-pool-light-card
+            entity: switch.pool_light
+          - type: markdown
+            title: Автоматичний розклад
+            content: Перевірка вирівнювання
+      - type: grid
+        cards:
+          - type: custom:sonoff-pool-pump-card
+            entity: switch.pool_pump
+          - type: markdown
+            title: Автоматичний розклад
+            content: Перевірка вирівнювання

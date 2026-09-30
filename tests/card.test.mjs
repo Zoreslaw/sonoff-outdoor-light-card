@@ -49,6 +49,23 @@ test('configuration validation', () => {
   assert.throws(() => el.setConfig({ ...config, name: 123 }), /Назва має бути рядком/);
 });
 
+test('Sections defaults match the pool cards without YAML sizing overrides', async () => {
+  const el = new Card();
+  const expected = { columns: 6, rows: 4, min_columns: 3, min_rows: 4 };
+  assert.deepEqual(el.getGridOptions(), expected);
+  assert.equal(el.getCardSize(), 4);
+  el.setConfig(config);
+  document.body.append(el);
+  for (const value of ['off', 'on', 'unavailable']) {
+    el.hass = hass(value);
+    await el.updateComplete;
+    assert.deepEqual(el.getGridOptions(), expected);
+  }
+  el.getGridOptions().rows = 20;
+  assert.deepEqual(el.getGridOptions(), expected);
+  el.remove();
+});
+
 test('renders name, state, entity and reacts to hass/config changes', async () => {
   const el = await card();
   assert.equal(el.shadowRoot.querySelector('h2').textContent, 'Garden');
